@@ -23,10 +23,10 @@ int binary_search(int *ordered_array, int array_size, int scoped_number){
             return binary_search.middle;
         }
         else if (ordered_array[binary_search.middle] < scoped_number) {
-            binary_search.bottom = binary_search.middle;
+            binary_search.bottom = binary_search.middle + 1;
         }
         else if (ordered_array[binary_search.middle] > scoped_number) {
-            binary_search.top = binary_search.middle;
+            binary_search.top = binary_search.middle - 1;
         }
     }
 
