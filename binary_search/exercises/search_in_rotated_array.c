@@ -3,21 +3,30 @@
 #include <stdbool.h>
 #include <string.h>
 
-// it is bugged but imma not debbug it 
-int findSmallerNumberPosition(int* nums, int numsSize, int bottom, int top){
-    if (bottom >= top) {
-        return bottom; 
+int findSmallerNumberPosition(int* nums, int numsSize) {
+    int bottom = 0;
+    int top = numsSize - 1;
+    
+    if (nums[bottom] < nums[top] || numsSize == 1) {
+        return bottom;
     }
 
-    int middle = (top + bottom) / 2;
+    while (bottom <= top) {
+        int mid = (bottom + top) / 2;
 
-    if (nums[bottom] > nums[middle]) {
-        return findSmallerNumberPosition(nums, numsSize, bottom, middle); 
-    } else {
-        return findSmallerNumberPosition(nums, numsSize, middle + 1, top); 
+        if (mid > 0 && nums[mid] < nums[mid - 1]) {
+            return mid;
+        }
+
+        if (nums[mid] > nums[top]) {
+            bottom = mid + 1;
+        } else {
+            top = mid - 1;
+        }
     }
+
+    return -1;
 }
-
 
 int binary_search(int* nums, int numsSize, int target){
     int bottom = 0;
@@ -32,7 +41,7 @@ int binary_search(int* nums, int numsSize, int target){
         else if(nums[middle] < target){
             bottom = middle + 1;
         }
-        else if(nums[middle] < target){
+        else if(nums[middle] > target){
             top = middle - 1;
         }
     }
@@ -43,18 +52,9 @@ int binary_search(int* nums, int numsSize, int target){
 int search(int* nums, int numsSize, int target) {
     int bottom = 0;
     int top = numsSize - 1;
-    int smallestNumberPosition;
 
-    int probablySmallestNumberPosition = findSmallerNumberPosition(nums, numsSize, bottom, top);
-
-    // turnaround bc i am lazzy enought to fix the function findSmallerNumberPosition
-    if(nums[probablySmallestNumberPosition] > nums[probablySmallestNumberPosition+1]){
-        smallestNumberPosition = probablySmallestNumberPosition + 1;
-    } else smallestNumberPosition = probablySmallestNumberPosition;
+    int smallestNumberPosition = findSmallerNumberPosition(nums, numsSize);
     
-
-    printf("%d", smallestNumberPosition);
-
     int sizeArr1 = numsSize - smallestNumberPosition;
     int sizeArr2 = numsSize - sizeArr1;
 
@@ -83,12 +83,10 @@ int search(int* nums, int numsSize, int target) {
     free(arr2);
 }
 
+// created to run locally
 int main(){
     int array[7] = {4,5,6,7,0,1,2};
-
     int position = search(array, 7, 0);
-
     printf("%d\n", position);
-
     return 0;
 }
